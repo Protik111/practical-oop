@@ -5,4 +5,3 @@ import { AppConfig } from "./Appconfig";
 
 // const config = AppConfig.getInstance();
 // console.log('config',config );
-
