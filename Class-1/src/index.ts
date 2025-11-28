@@ -1,7 +1,8 @@
+import dotenv from 'dotenv';
 import { AppConfig } from "./Appconfig";
 
-import dotenv from 'dotenv';
+// dotenv.config();
 
-dotenv.config();
+// const config = AppConfig.getInstance();
+// console.log('config',config );
 
-console.log('App', AppConfig.getInstance());
