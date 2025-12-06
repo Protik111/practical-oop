@@ -1,7 +1,9 @@
+import { AudioBook } from "./AudioBook";
 import { Book } from "./Book";
 import { Ebook } from "./Ebook";
 import { InventoryManager } from "./InventoryManager";
 import { Magazine } from "./Magazine";
+import { Pen } from "./Pen";
 
 // const book = new Book(
 //   "b1",
@@ -77,3 +79,9 @@ inventoryManager.addProduct(
     "Fiction"
   )
 );
+
+inventoryManager.addProduct(new AudioBook("id6", "AudioBook title 1", 500, 10));
+inventoryManager.addProduct(new AudioBook("id7", "AudioBook title 2", 500, 10));
+inventoryManager.addProduct(new Pen("id8", "Pen title 1", 500, 10));
+
+console.log("\n\n" + inventoryManager.generateInventoryReport() + "\n\n");
