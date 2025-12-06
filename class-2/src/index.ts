@@ -1,14 +1,14 @@
 import { Book } from "./Book";
 
 const book = new Book(
-  'b1',
-  'Clean Code',
-  'Robert C. Martin',
+  "b1",
+  "Clean Code",
+  "Robert C. Martin",
   30,
   10,
-  '9780132350884',
+  "9780132350884",
   464,
-  'Programming'
+  "Programming"
 );
 
 console.log(book.checkStock(5));
