@@ -21,6 +21,7 @@ export class SMSService implements INotificationService {
 export class PushNotificationService implements INotificationService {
   send(message: string, deviceToken: string): boolean {
     console.log(`Sending push to ${deviceToken}: ${message}`);
-    return navigator.onLine; // Depends on network connection
+    return true;
+    //return navigator.onLine; // Depends on network connection
   }
 }

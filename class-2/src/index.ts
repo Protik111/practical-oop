@@ -1,8 +1,20 @@
 import { AudioBook } from "./AudioBook";
 import { Book } from "./Book";
+import { Checkout } from "./Checkout";
 import { Ebook } from "./Ebook";
 import { InventoryManager } from "./InventoryManager";
 import { Magazine } from "./Magazine";
+import {
+  EmailService,
+  INotificationService,
+  PushNotificationService,
+  SMSService,
+} from "./Notification";
+import {
+  ApplePayPaymentProcessor,
+  SSLCommerzPaymentProcessor,
+  StripePaymentProcessor,
+} from "./Payment";
 import { Pen } from "./Pen";
 
 // const book = new Book(
@@ -84,4 +96,58 @@ inventoryManager.addProduct(new AudioBook("id6", "AudioBook title 1", 500, 10));
 inventoryManager.addProduct(new AudioBook("id7", "AudioBook title 2", 500, 10));
 inventoryManager.addProduct(new Pen("id8", "Pen title 1", 500, 10));
 
-console.log("\n\n" + inventoryManager.generateInventoryReport() + "\n\n");
+// console.log("\n\n" + inventoryManager.generateInventoryReport() + "\n\n");
+
+inventoryManager.recordSale("id1", 2);
+inventoryManager.recordSale("id2", 1);
+inventoryManager.recordSale("id3", 2);
+inventoryManager.recordSale("id4", 3);
+inventoryManager.recordSale("id5", 1);
+
+// console.log("\n\n" + inventoryManager.generateSalesReport() + "\n\n");
+
+// console.log("\n\n" + inventoryManager.generateInventoryReport() + "\n\n");
+
+class NotificationManager {
+  constructor(private services: INotificationService[]) {}
+
+  broadcast(message: string, receiver: string): void {
+    this.services.forEach((service) => {
+      service.send(message, receiver);
+    });
+  }
+}
+
+class SlackService implements INotificationService {
+  send(message: string, receiver: string): boolean {
+    console.log(`Slack → ${receiver}: ${message}`);
+    return true;
+  }
+}
+
+const notifier: NotificationManager = new NotificationManager([
+  new SlackService(),
+  new EmailService(),
+  new SMSService(),
+  new PushNotificationService(),
+]);
+
+notifier.broadcast("Hello", "John Doe");
+
+const checkout1 = new Checkout(new StripePaymentProcessor());
+const checkout2 = new Checkout(new SSLCommerzPaymentProcessor());
+const checkout3 = new Checkout(new ApplePayPaymentProcessor());
+
+async function main() {
+  const result1 = await checkout1.completePurchase(100);
+  const result2 = await checkout2.completePurchase(100);
+  const result3 = await checkout3.completePurchase(100);
+
+  if (result1.success) {
+    setTimeout(() => {
+      checkout1.handleRefund(result1.transactionId!);
+    }, 3000);
+  }
+}
+
+main();
